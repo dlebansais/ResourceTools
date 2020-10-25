@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net48</TargetFrameworks>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <RootNamespace>TestResourceTools</RootNamespace>
     <UseWPF>true</UseWPF>
     <LangVersion>8.0</LangVersion>
