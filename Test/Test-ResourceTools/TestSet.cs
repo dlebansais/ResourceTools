@@ -16,6 +16,8 @@
         [OneTimeSetUp]
         public static void InitTestSession()
         {
+            //System.Diagnostics.Debug.Assert(false);
+
             CultureInfo enUS = CultureInfo.CreateSpecificCulture("en-US");
             CultureInfo.DefaultThreadCurrentCulture = enUS;
             CultureInfo.DefaultThreadCurrentUICulture = enUS;
@@ -47,26 +49,26 @@
             Assert.That(Constant == true);
 
             ITracer Logger = Tracer.Create("Test");
-            Loader.SetLogger(Logger);
+            ResourceLoader.SetLogger(Logger);
 
-            Success = Loader.Load(string.Empty, string.Empty, out Icon);
+            Success = ResourceLoader.Load(string.Empty, string.Empty, out Icon);
             Assert.That(!Success);
 
-            Success = Loader.Load("invalid.ico", string.Empty, out Icon);
+            Success = ResourceLoader.Load("invalid.ico", string.Empty, out Icon);
             Assert.That(!Success);
 
-            Success = Loader.Load("invalid.ico", "Invalid", out Icon);
+            Success = ResourceLoader.Load("invalid.ico", "Invalid", out Icon);
             Assert.That(!Success);
 
-            Success = Loader.Load(string.Empty, "Invalid", out Icon);
+            Success = ResourceLoader.Load(string.Empty, "Invalid", out Icon);
             Assert.That(!Success);
 
-            Success = Loader.LoadStream("main.png", string.Empty, out Stream);
+            Success = ResourceLoader.LoadStream("main.png", string.Empty, out Stream);
             Assert.That(Success);
 
             Stream.Dispose();
 
-            Success = Loader.LoadStream("invalid.png", string.Empty, out Stream);
+            Success = ResourceLoader.LoadStream("invalid.png", string.Empty, out Stream);
             Assert.That(!Success);
         }
 
@@ -77,37 +79,37 @@
             Icon Icon;
             ImageSource ImageSource;
 
-            Success = Loader.LoadIcon(string.Empty, string.Empty, out Icon);
+            Success = ResourceLoader.LoadIcon(string.Empty, string.Empty, out Icon);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon(string.Empty, string.Empty, out ImageSource);
+            Success = ResourceLoader.LoadIcon(string.Empty, string.Empty, out ImageSource);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon("main.ico", string.Empty, out Icon);
+            Success = ResourceLoader.LoadIcon("main.ico", string.Empty, out Icon);
             Assert.That(Success);
 
-            Success = Loader.LoadIcon("compressed.ico", string.Empty, out Icon);
+            Success = ResourceLoader.LoadIcon("compressed.ico", string.Empty, out Icon);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon("compressed.ico", "Test-Compressed", out Icon);
+            Success = ResourceLoader.LoadIcon("compressed.ico", "Test-Compressed", out Icon);
             Assert.That(Success);
 
-            Success = Loader.LoadIcon("compressed.ico", "Test-Compressed", out ImageSource);
+            Success = ResourceLoader.LoadIcon("compressed.ico", "Test-Compressed", out ImageSource);
             Assert.That(Success);
 
-            Success = Loader.LoadIcon("compressed.ico", "Invalid", out Icon);
+            Success = ResourceLoader.LoadIcon("compressed.ico", "Invalid", out Icon);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon("invalid.ico", string.Empty, out Icon);
+            Success = ResourceLoader.LoadIcon("invalid.ico", string.Empty, out Icon);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon(string.Empty, "Invalid", out Icon);
+            Success = ResourceLoader.LoadIcon(string.Empty, "Invalid", out Icon);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon("invalid.ico", string.Empty, out ImageSource);
+            Success = ResourceLoader.LoadIcon("invalid.ico", string.Empty, out ImageSource);
             Assert.That(!Success);
 
-            Success = Loader.LoadIcon(string.Empty, "Invalid", out ImageSource);
+            Success = ResourceLoader.LoadIcon(string.Empty, "Invalid", out ImageSource);
             Assert.That(!Success);
         }
 
@@ -117,25 +119,25 @@
             bool Success;
             Bitmap Bitmap;
 
-            Success = Loader.LoadBitmap(string.Empty, string.Empty, out Bitmap);
+            Success = ResourceLoader.LoadBitmap(string.Empty, string.Empty, out Bitmap);
             Assert.That(!Success);
 
-            Success = Loader.LoadBitmap("main.png", string.Empty, out Bitmap);
+            Success = ResourceLoader.LoadBitmap("main.png", string.Empty, out Bitmap);
             Assert.That(Success);
 
-            Success = Loader.LoadBitmap("compressed.png", string.Empty, out Bitmap);
+            Success = ResourceLoader.LoadBitmap("compressed.png", string.Empty, out Bitmap);
             Assert.That(!Success);
 
-            Success = Loader.LoadBitmap("compressed.png", "Test-Compressed", out Bitmap);
+            Success = ResourceLoader.LoadBitmap("compressed.png", "Test-Compressed", out Bitmap);
             Assert.That(Success);
 
-            Success = Loader.LoadBitmap("compressed.png", "Invalid", out Bitmap);
+            Success = ResourceLoader.LoadBitmap("compressed.png", "Invalid", out Bitmap);
             Assert.That(!Success);
 
-            Success = Loader.LoadBitmap("invalid.png", string.Empty, out Bitmap);
+            Success = ResourceLoader.LoadBitmap("invalid.png", string.Empty, out Bitmap);
             Assert.That(!Success);
 
-            Success = Loader.LoadBitmap(string.Empty, "Invalid", out Bitmap);
+            Success = ResourceLoader.LoadBitmap(string.Empty, "Invalid", out Bitmap);
             Assert.That(!Success);
         }
         #endregion

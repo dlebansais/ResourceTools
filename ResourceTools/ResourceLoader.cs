@@ -14,7 +14,7 @@
     /// <summary>
     /// This class provides an interface to load embedded resources of a specific type, including those compressed with Costura Fody.
     /// </summary>
-    public static class Loader
+    public static class ResourceLoader
     {
         #region Logger
         /// <summary>
@@ -25,7 +25,7 @@
         {
             Contract.RequireNotNull(logger, out ITracer Logger);
 
-            Loader.Logger = Logger;
+            ResourceLoader.Logger = Logger;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@
             Assembly CallingAssembly = Assembly.GetCallingAssembly();
             if (!LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out Stream ResourceStream))
             {
-                ResourceStream.Dispose();
+                ResourceStream?.Dispose();
 
                 Contract.Unused(out value);
                 return false;
@@ -164,14 +164,14 @@
         {
             if (!LoadInternalStream(resourceName, assemblyName, callingAssembly, out Stream ResourceStream))
             {
-                ResourceStream.Dispose();
+                ResourceStream?.Dispose();
 
                 Contract.Unused(out value);
                 return false;
             }
             else
             {
-                TResource Result = (TResource)Activator.CreateInstance(typeof(TResource), ResourceStream);
+                TResource Result = (TResource)Activator.CreateInstance(typeof(TResource), ResourceStream) !;
                 Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
 
                 value = Result;
@@ -198,7 +198,7 @@
             }
             else
             {
-                resourceStream = ResourceAssembly.GetManifestResourceStream(ResourcePath);
+                resourceStream = ResourceAssembly.GetManifestResourceStream(ResourcePath) !;
                 return true;
             }
         }
@@ -210,7 +210,7 @@
             EmbeddedAssemblyResourcePath = EmbeddedAssemblyResourcePath.ToLowerInvariant();
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
-            using Stream CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath);
+            using Stream CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath) !;
             if (CompressedStream == null)
             {
                 Logger?.Write(Category.Error, $"Assembly {assemblyName} not found (did you forget to use Costura Fody?)");

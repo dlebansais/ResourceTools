@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net48</TargetFrameworks>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
     <RootNamespace>TestResourceTools</RootNamespace>
     <UseWPF>true</UseWPF>
     <LangVersion>8.0</LangVersion>
