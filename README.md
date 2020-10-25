@@ -19,7 +19,7 @@ This tools provides some helpers to load embedded resources even if they have be
 
 ## Generic load
 
-	public static bool Load<TResource>(string resourceName, string assemblyName, out TResource value)
+	bool Load<TResource>(string resourceName, string assemblyName, out TResource value);
 
 Loads the resource `resourceName` (for example "MyNamespace.MyFolder.myimage.png") embedded in assembly `assemblyName` (without extension). If the resource is found, the method returns `true` and a reference to the resource in `value`. Otherwise it returns `false` and `value` is undefined.
 
@@ -29,6 +29,7 @@ To load directly from the calling assembly, set `assemblyName` to `string.Empty`
 
 This tool can loaded specific types of resources. For example, the `LoadIcon` method will only load icons (in case the resource type is not really known):
 
-	public static bool LoadIcon(string resourceName, string assemblyName, out Icon value)
+	bool LoadIcon(string resourceName, string assemblyName, out Icon value);
+	bool LoadIcon(string resourceName, string assemblyName, out ImageSource value);
 
 The tool can also display log traces with the `SetLogger` method. The default is to not have traces.  

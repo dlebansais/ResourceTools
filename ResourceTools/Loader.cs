@@ -6,6 +6,8 @@
     using System.IO;
     using System.IO.Compression;
     using System.Reflection;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
     using Contracts;
     using Tracing;
 
@@ -14,6 +16,7 @@
     /// </summary>
     public static class Loader
     {
+        #region Logger
         /// <summary>
         /// Sets a tracing object for diagnostic purpose.
         /// </summary>
@@ -29,9 +32,12 @@
         /// Gets the tracing object.
         /// </summary>
         public static ITracer? Logger { get; private set; }
+        #endregion
 
+        #region Icon
         /// <summary>
         /// Loads an icon resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
+        /// This method returns a <see cref="Icon"/> object.
         /// </summary>
         /// <param name="resourceName">The resource name.</param>
         /// <param name="assemblyName">The assembly name, String.Empty to use the calling assembly directly.</param>
@@ -50,6 +56,42 @@
             return false;
         }
 
+        /// <summary>
+        /// Loads an icon resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
+        /// This method returns a <see cref="ImageSource"/> object.
+        /// </summary>
+        /// <param name="resourceName">The resource name.</param>
+        /// <param name="assemblyName">The assembly name, String.Empty to use the calling assembly directly.</param>
+        /// <param name="value">The resource icon upon return.</param>
+        /// <returns>True if the icon was found and loaded; otherwise, false.</returns>
+        public static bool LoadIcon(string resourceName, string assemblyName, out ImageSource value)
+        {
+            Contract.RequireNotNull(resourceName, out string ResourceName);
+            Contract.RequireNotNull(assemblyName, out string AssemblyName);
+
+            Assembly CallingAssembly = Assembly.GetCallingAssembly();
+            if (!LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out Stream ResourceStream))
+            {
+                ResourceStream.Dispose();
+
+                Contract.Unused(out value);
+                return false;
+            }
+            else
+            {
+                // Decode the icon from the stream and set the first frame to the BitmapSource
+                BitmapDecoder decoder = IconBitmapDecoder.Create(ResourceStream, BitmapCreateOptions.None, BitmapCacheOption.None);
+                ImageSource Result = decoder.Frames[0];
+
+                Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
+
+                value = Result;
+                return true;
+            }
+        }
+        #endregion
+
+        #region Generic
         /// <summary>
         /// Loads a resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
         /// </summary>
@@ -71,9 +113,30 @@
             Contract.Unused(out value);
             return false;
         }
+        #endregion
 
+        #region Implementation
         private static bool LoadInternal<TResource>(string resourceName, string assemblyName, Assembly callingAssembly, out TResource value)
             where TResource : class
+        {
+            if (!LoadInternalStream(resourceName, assemblyName, callingAssembly, out Stream ResourceStream))
+            {
+                ResourceStream.Dispose();
+
+                Contract.Unused(out value);
+                return false;
+            }
+            else
+            {
+                TResource Result = (TResource)Activator.CreateInstance(typeof(TResource), ResourceStream);
+                Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
+
+                value = Result;
+                return true;
+            }
+        }
+
+        private static bool LoadInternalStream(string resourceName, string assemblyName, Assembly callingAssembly, out Stream resourceStream)
         {
             if (assemblyName.Length > 0)
                 if (!DecompressedAssemblyTable.ContainsKey(assemblyName))
@@ -101,17 +164,14 @@
             {
                 Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
 
-                Contract.Unused(out value);
+                Contract.Unused(out resourceStream);
                 return false;
             }
-
-            using Stream ResourceStream = UsingAssembly.GetManifestResourceStream(ResourcePath);
-
-            TResource Result = (TResource)Activator.CreateInstance(typeof(TResource), ResourceStream);
-            Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
-
-            value = Result;
-            return true;
+            else
+            {
+                resourceStream = UsingAssembly.GetManifestResourceStream(ResourcePath);
+                return true;
+            }
         }
 
         private static bool LoadEmbeddedAssemblyStream(string assemblyName, Assembly callingAssembly, out Assembly decompressedAssembly)
@@ -148,5 +208,6 @@
         }
 
         private static Dictionary<string, Assembly> DecompressedAssemblyTable = new Dictionary<string, Assembly>();
+        #endregion
     }
 }
