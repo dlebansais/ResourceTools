@@ -20,10 +20,12 @@
 
   <ItemGroup>
     <None Remove="Resources\main.ico" />
+    <None Remove="Resources\main.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\main.ico" />
+    <EmbeddedResource Include="Resources\main.png" />
   </ItemGroup>
 
   <ItemGroup>

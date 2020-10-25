@@ -13,10 +13,12 @@
 
   <ItemGroup>
     <None Remove="Resources\compressed.ico" />
+    <None Remove="Resources\compressed.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\compressed.ico" />
+    <EmbeddedResource Include="Resources\compressed.png" />
   </ItemGroup>
 
   <ItemGroup>

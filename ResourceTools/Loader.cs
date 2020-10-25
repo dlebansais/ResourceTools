@@ -91,6 +91,29 @@
         }
         #endregion
 
+        #region Icon
+        /// <summary>
+        /// Loads an bitmap resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
+        /// This method returns a <see cref="Bitmap"/> object.
+        /// </summary>
+        /// <param name="resourceName">The resource name.</param>
+        /// <param name="assemblyName">The assembly name, String.Empty to use the calling assembly directly.</param>
+        /// <param name="value">The resource bitmap upon return.</param>
+        /// <returns>True if the bitmap was found and loaded; otherwise, false.</returns>
+        public static bool LoadBitmap(string resourceName, string assemblyName, out Bitmap value)
+        {
+            Contract.RequireNotNull(resourceName, out string ResourceName);
+            Contract.RequireNotNull(assemblyName, out string AssemblyName);
+
+            Assembly CallingAssembly = Assembly.GetCallingAssembly();
+            if (LoadInternal(ResourceName, AssemblyName, CallingAssembly, out value))
+                return true;
+
+            Contract.Unused(out value);
+            return false;
+        }
+        #endregion
+
         #region Generic
         /// <summary>
         /// Loads a resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
@@ -111,6 +134,26 @@
                 return true;
 
             Contract.Unused(out value);
+            return false;
+        }
+
+        /// <summary>
+        /// Loads a resource stream. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
+        /// </summary>
+        /// <param name="resourceName">The resource name.</param>
+        /// <param name="assemblyName">The assembly name, String.Empty to use the calling assembly directly.</param>
+        /// <param name="resourceStream">The stream object upon return.</param>
+        /// <returns>True if the resource was found and stream loaded; otherwise, false.</returns>
+        public static bool LoadStream(string resourceName, string assemblyName, out Stream resourceStream)
+        {
+            Contract.RequireNotNull(resourceName, out string ResourceName);
+            Contract.RequireNotNull(assemblyName, out string AssemblyName);
+
+            Assembly CallingAssembly = Assembly.GetCallingAssembly();
+            if (LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out resourceStream))
+                return true;
+
+            Contract.Unused(out resourceStream);
             return false;
         }
         #endregion
@@ -143,25 +186,11 @@
                     if (LoadEmbeddedAssemblyStream(assemblyName, callingAssembly, out Assembly DecompressedAssembly))
                         DecompressedAssemblyTable.Add(assemblyName, DecompressedAssembly);
 
-            Assembly UsingAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : callingAssembly;
-            string ResourcePath = string.Empty;
+            Assembly ResourceAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : callingAssembly;
 
-            if (resourceName.Length > 0)
+            if (!GetResourcePath(ResourceAssembly, resourceName, out string ResourcePath))
             {
-                // Loads an "Embedded Resource" of type TResource (ex: Bitmap for a PNG file).
-                // Make sure the resource is tagged as such in the resource properties.
-                string[] ResourceNames = UsingAssembly.GetManifestResourceNames();
-                foreach (string Item in ResourceNames)
-                    if (Item.EndsWith(resourceName, StringComparison.InvariantCulture))
-                    {
-                        ResourcePath = Item;
-                        break;
-                    }
-            }
-
-            // If not found, it could be because it's not tagged as "Embedded Resource".
-            if (ResourcePath.Length == 0)
-            {
+                // If not found, it could be because it's not tagged as "Embedded Resource".
                 Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
 
                 Contract.Unused(out resourceStream);
@@ -169,7 +198,7 @@
             }
             else
             {
-                resourceStream = UsingAssembly.GetManifestResourceStream(ResourcePath);
+                resourceStream = ResourceAssembly.GetManifestResourceStream(ResourcePath);
                 return true;
             }
         }
@@ -205,6 +234,25 @@
 
             decompressedAssembly = Assembly.Load(array);
             return true;
+        }
+
+        private static bool GetResourcePath(Assembly resourceAssembly, string resourceName, out string resourcePath)
+        {
+            if (resourceName.Length > 0)
+            {
+                // Loads an "Embedded Resource" of type TResource (ex: Bitmap for a PNG file).
+                // Make sure the resource is tagged as such in the resource properties.
+                string[] ResourceNames = resourceAssembly.GetManifestResourceNames();
+                foreach (string Item in ResourceNames)
+                    if (Item.EndsWith(resourceName, StringComparison.InvariantCulture))
+                    {
+                        resourcePath = Item;
+                        return true;
+                    }
+            }
+
+            Contract.Unused(out resourcePath);
+            return false;
         }
 
         private static Dictionary<string, Assembly> DecompressedAssemblyTable = new Dictionary<string, Assembly>();
