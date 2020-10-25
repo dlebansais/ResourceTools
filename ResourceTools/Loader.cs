@@ -93,7 +93,12 @@
 
             // If not found, it could be because it's not tagged as "Embedded Resource".
             if (ResourcePath.Length == 0)
+            {
                 Logger?.Write(Category.Error, $"Resource {resourceName} not found (is it tagged as \"Embedded Resource\"?)");
+
+                Contract.Unused(out value);
+                return false;
+            }
 
             using Stream ResourceStream = UsingAssembly.GetManifestResourceStream(ResourcePath);
 
