@@ -9,6 +9,8 @@
     using System.Threading;
     using System.IO;
     using System.Drawing;
+    using Tracing;
+    using System.Diagnostics;
 
     [TestFixture]
     public class TestSet
@@ -42,11 +44,21 @@
             bool Success;
             Icon Icon;
 
+            Debug.Assert(false);
             Success = Loader.Load(string.Empty, string.Empty, out Icon);
             Assert.That(!Success);
 
             Success = Loader.LoadIcon(string.Empty, string.Empty, out Icon);
             Assert.That(!Success);
+
+            ITracer Logger = Tracer.Create("Test");
+            Loader.SetLogger(Logger);
+
+            Success = Loader.Load("main.ico", string.Empty, out Icon);
+            Assert.That(Success);
+
+            Success = Loader.LoadIcon("main.ico", string.Empty, out Icon);
+            Assert.That(Success);
         }
         #endregion
     }

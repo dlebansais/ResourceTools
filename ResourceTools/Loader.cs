@@ -31,10 +31,10 @@
         public static ITracer? Logger { get; private set; }
 
         /// <summary>
-        /// Loads an icon resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the executing assembly if not found.
+        /// Loads an icon resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
         /// </summary>
         /// <param name="resourceName">The resource name.</param>
-        /// <param name="assemblyName">The assembly name, String.Empty to use the executing assembly directly.</param>
+        /// <param name="assemblyName">The assembly name, String.Empty to use the calling assembly directly.</param>
         /// <param name="value">The resource icon upon return.</param>
         /// <returns>True if the icon was found and loaded; otherwise, false.</returns>
         public static bool LoadIcon(string resourceName, string assemblyName, out Icon value)
@@ -42,7 +42,8 @@
             Contract.RequireNotNull(resourceName, out string ResourceName);
             Contract.RequireNotNull(assemblyName, out string AssemblyName);
 
-            if (LoadInternal(ResourceName, AssemblyName, out value))
+            Assembly CallingAssembly = Assembly.GetCallingAssembly();
+            if (LoadInternal(ResourceName, AssemblyName, CallingAssembly, out value))
                 return true;
 
             Contract.Unused(out value);
@@ -50,11 +51,11 @@
         }
 
         /// <summary>
-        /// Loads a resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the executing assembly if not found.
+        /// Loads a resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
         /// </summary>
         /// <typeparam name="TResource">The resource type.</typeparam>
         /// <param name="resourceName">The resource name.</param>
-        /// <param name="assemblyName">The assembly name, String.Empty to use the executing assembly directly.</param>
+        /// <param name="assemblyName">The assembly name, String.Empty to use the calling assembly directly.</param>
         /// <param name="value">The resource object upon return.</param>
         /// <returns>True if the resource was found and loaded; otherwise, false.</returns>
         public static bool Load<TResource>(string resourceName, string assemblyName, out TResource value)
@@ -63,14 +64,15 @@
             Contract.RequireNotNull(resourceName, out string ResourceName);
             Contract.RequireNotNull(assemblyName, out string AssemblyName);
 
-            if (LoadInternal(ResourceName, AssemblyName, out value))
+            Assembly CallingAssembly = Assembly.GetCallingAssembly();
+            if (LoadInternal(ResourceName, AssemblyName, CallingAssembly, out value))
                 return true;
 
             Contract.Unused(out value);
             return false;
         }
 
-        private static bool LoadInternal<TResource>(string resourceName, string assemblyName, out TResource value)
+        private static bool LoadInternal<TResource>(string resourceName, string assemblyName, Assembly callingAssembly, out TResource value)
             where TResource : class
         {
             if (assemblyName.Length > 0)
@@ -78,23 +80,26 @@
                     if (LoadEmbeddedAssemblyStream(assemblyName, out Assembly DecompressedAssembly))
                         DecompressedAssemblyTable.Add(assemblyName, DecompressedAssembly);
 
-            Assembly UsingAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : Assembly.GetExecutingAssembly();
+            Assembly UsingAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : callingAssembly;
             string ResourcePath = string.Empty;
 
-            // Loads an "Embedded Resource" of type T (ex: Bitmap for a PNG file).
-            // Make sure the resource is tagged as such in the resource properties.
-            string[] ResourceNames = UsingAssembly.GetManifestResourceNames();
-            foreach (string Item in ResourceNames)
-                if (Item.EndsWith(resourceName, StringComparison.InvariantCulture))
-                {
-                    ResourcePath = Item;
-                    break;
-                }
+            if (resourceName.Length > 0)
+            {
+                // Loads an "Embedded Resource" of type TResource (ex: Bitmap for a PNG file).
+                // Make sure the resource is tagged as such in the resource properties.
+                string[] ResourceNames = UsingAssembly.GetManifestResourceNames();
+                foreach (string Item in ResourceNames)
+                    if (Item.EndsWith(resourceName, StringComparison.InvariantCulture))
+                    {
+                        ResourcePath = Item;
+                        break;
+                    }
+            }
 
             // If not found, it could be because it's not tagged as "Embedded Resource".
             if (ResourcePath.Length == 0)
             {
-                Logger?.Write(Category.Error, $"Resource {resourceName} not found (is it tagged as \"Embedded Resource\"?)");
+                Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
 
                 Contract.Unused(out value);
                 return false;
@@ -103,7 +108,7 @@
             using Stream ResourceStream = UsingAssembly.GetManifestResourceStream(ResourcePath);
 
             TResource Result = (TResource)Activator.CreateInstance(typeof(TResource), ResourceStream);
-            Logger?.Write(Category.Debug, $"Resource {resourceName} loaded");
+            Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
 
             value = Result;
             return true;
