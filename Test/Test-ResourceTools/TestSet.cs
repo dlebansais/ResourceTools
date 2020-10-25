@@ -40,7 +40,7 @@
             bool Success;
             Icon Icon;
 
-            bool Constant = Dependency.Constant;
+            bool Constant = Dependency.GetConstant();
             Assert.That(Constant == true);
 
             Success = Loader.Load(string.Empty, string.Empty, out Icon);

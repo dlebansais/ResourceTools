@@ -2,6 +2,9 @@
 {
     public static class Dependency
     {
-        public const bool Constant = true;
+        public static bool GetConstant()
+        {
+            return true;
+        }
     }
 }
