@@ -63,6 +63,9 @@
 
             Success = Loader.LoadIcon("compressed.ico", "Test-Compressed", out Icon);
             Assert.That(Success);
+
+            Success = Loader.LoadIcon("compressed.ico", "Invalid", out Icon);
+            Assert.That(!Success);
         }
         #endregion
     }

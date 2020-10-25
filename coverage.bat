@@ -30,6 +30,11 @@ dotnet publish ./Test/%TESTPROJECTNAME% -c Release -f %FRAMEWORK% /p:Platform=x6
 
 if not exist ".\Test\%TESTPROJECTNAME%\publish\x64\Debug\%TESTPROJECTNAME%.dll" goto error_not_built
 if not exist ".\Test\%TESTPROJECTNAME%\publish\x64\Release\%TESTPROJECTNAME%.dll" goto error_not_built
+copy ".\%PROJECTNAME%\bin\x64\Debug\net48\%PROJECTNAME%.dll" ".\Test\%TESTPROJECTNAME%\publish\x64\Debug\"
+copy ".\%PROJECTNAME%\bin\x64\Debug\net48\%PROJECTNAME%.pdb" ".\Test\%TESTPROJECTNAME%\publish\x64\Debug\"
+copy ".\%PROJECTNAME%\bin\x64\Release\net48\%PROJECTNAME%.dll" ".\Test\%TESTPROJECTNAME%\publish\x64\Release\"
+copy ".\%PROJECTNAME%\bin\x64\Release\net48\%PROJECTNAME%.pdb" ".\Test\%TESTPROJECTNAME%\publish\x64\Release\"
+
 if exist .\Test\%TESTPROJECTNAME%\*.log del .\Test\%TESTPROJECTNAME%\*.log
 if exist .\Test\%TESTPROJECTNAME%\obj\x64\Debug\%RESULTFILENAME% del .\Test\%TESTPROJECTNAME%\obj\x64\Debug\%RESULTFILENAME%
 if exist .\Test\%TESTPROJECTNAME%\obj\x64\Release\%RESULTFILENAME% del .\Test\%TESTPROJECTNAME%\obj\x64\Release\%RESULTFILENAME%
