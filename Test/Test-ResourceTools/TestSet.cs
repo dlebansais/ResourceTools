@@ -1,17 +1,12 @@
 ﻿namespace TestResourceTools
 {
-    using ResourceTools;
     using NUnit.Framework;
-    using System;
-    using System.Collections.Generic;
+    using ResourceTools;
+    using System.Drawing;
     using System.Globalization;
     using System.Reflection;
     using System.Threading;
-    using System.IO;
-    using System.Drawing;
     using Tracing;
-    using System.Diagnostics;
-    using System.Windows;
 
     [TestFixture]
     public class TestSet
