@@ -77,7 +77,7 @@
         {
             if (assemblyName.Length > 0)
                 if (!DecompressedAssemblyTable.ContainsKey(assemblyName))
-                    if (LoadEmbeddedAssemblyStream(assemblyName, out Assembly DecompressedAssembly))
+                    if (LoadEmbeddedAssemblyStream(assemblyName, callingAssembly, out Assembly DecompressedAssembly))
                         DecompressedAssemblyTable.Add(assemblyName, DecompressedAssembly);
 
             Assembly UsingAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : callingAssembly;
@@ -114,16 +114,14 @@
             return true;
         }
 
-        private static bool LoadEmbeddedAssemblyStream(string assemblyName, out Assembly decompressedAssembly)
+        private static bool LoadEmbeddedAssemblyStream(string assemblyName, Assembly callingAssembly, out Assembly decompressedAssembly)
         {
-            Assembly assembly = Assembly.GetEntryAssembly();
-
             string EmbeddedAssemblyResourcePath = $"costura.{assemblyName}.dll.compressed";
 #pragma warning disable CA1308 // Normalize strings to uppercase
             EmbeddedAssemblyResourcePath = EmbeddedAssemblyResourcePath.ToLowerInvariant();
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
-            using Stream CompressedStream = assembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath);
+            using Stream CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath);
             if (CompressedStream == null)
             {
                 Logger?.Write(Category.Error, $"Assembly {assemblyName} not found (did you forget to use Costura Fody?)");

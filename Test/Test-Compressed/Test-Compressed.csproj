@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -12,22 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="publish\**" />
-    <EmbeddedResource Remove="publish\**" />
-    <None Remove="publish\**" />
-    <Page Remove="publish\**" />
+    <None Remove="Resources\compressed.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\main.ico" />
+    <EmbeddedResource Include="Resources\compressed.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\main.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Codecov" Version="1.12.3" />
     <PackageReference Include="Costura.Fody" Version="4.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -35,16 +27,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit.ConsoleRunner" Version="3.11.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="OpenCover" Version="4.7.922" />
-    <PackageReference Include="Tracing" Version="2.2.19302.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ResourceTools\ResourceTools.csproj" />
-    <ProjectReference Include="..\Test-Compressed\Test-Compressed.csproj" />
   </ItemGroup>
 
 </Project>

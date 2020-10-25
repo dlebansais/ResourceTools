@@ -11,6 +11,7 @@
     using System.Drawing;
     using Tracing;
     using System.Diagnostics;
+    using System.Windows;
 
     [TestFixture]
     public class TestSet
@@ -44,7 +45,9 @@
             bool Success;
             Icon Icon;
 
-            Debug.Assert(false);
+            bool Constant = Dependency.Constant;
+            Assert.That(Constant == true);
+
             Success = Loader.Load(string.Empty, string.Empty, out Icon);
             Assert.That(!Success);
 
@@ -58,6 +61,12 @@
             Assert.That(Success);
 
             Success = Loader.LoadIcon("main.ico", string.Empty, out Icon);
+            Assert.That(Success);
+
+            Success = Loader.LoadIcon("compressed.ico", string.Empty, out Icon);
+            Assert.That(!Success);
+
+            Success = Loader.LoadIcon("compressed.ico", "Test-Compressed", out Icon);
             Assert.That(Success);
         }
         #endregion

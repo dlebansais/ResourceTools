@@ -15,7 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreBuild", "PreBuild\PreBuild.csproj", "{ABB21FD7-B8E3-40FC-81F4-D6A4D873B6B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test-ResourceTools", "Test\Test-ResourceTools\Test-ResourceTools.csproj", "{F1861124-902C-45BB-A90E-D3625BE8BF46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-ResourceTools", "Test\Test-ResourceTools\Test-ResourceTools.csproj", "{F1861124-902C-45BB-A90E-D3625BE8BF46}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F} = {4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test-Compressed", "Test\Test-Compressed\Test-Compressed.csproj", "{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +40,10 @@ Global
 		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Debug|x64.Build.0 = Debug|x64
 		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Release|x64.ActiveCfg = Release|x64
 		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Release|x64.Build.0 = Release|x64
+		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Debug|x64.ActiveCfg = Debug|x64
+		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Debug|x64.Build.0 = Debug|x64
+		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Release|x64.ActiveCfg = Release|x64
+		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

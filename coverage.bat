@@ -23,6 +23,8 @@ if not exist ".\packages\%NUINT_CONSOLE%\tools\nunit3-console.exe" goto error_co
 
 call ..\Certification\set_tokens.bat
 
+if exist ".\Test\%TESTPROJECTNAME%\publish" rd /S /Q ".\Test\%TESTPROJECTNAME%\publish"
+
 dotnet publish ./Test/%TESTPROJECTNAME% -c Debug -f %FRAMEWORK% /p:Platform=x64 -o ./Test/%TESTPROJECTNAME%/publish/x64/Debug
 dotnet publish ./Test/%TESTPROJECTNAME% -c Release -f %FRAMEWORK% /p:Platform=x64 -o ./Test/%TESTPROJECTNAME%/publish/x64/Release
 
