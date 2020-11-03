@@ -91,7 +91,7 @@
         }
         #endregion
 
-        #region Icon
+        #region Bitmap
         /// <summary>
         /// Loads an bitmap resource. If <paramref name="assemblyName"/> is provided, tries to load it from the specified compressed assembly, and falls back to the calling assembly if not found.
         /// This method returns a <see cref="Bitmap"/> object.

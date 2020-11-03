@@ -18,34 +18,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\main.ico" />
-    <None Remove="Resources\main.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\main.ico" />
-    <EmbeddedResource Include="Resources\main.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Codecov" Version="1.12.3" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.11.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="OpenCover" Version="4.7.922" />
     <PackageReference Include="Tracing" Version="2.2.19302.1" />
-    <PackageReference Include="Costura.Fody" Version="4.1.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Fody" Version="6.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ResourceTools\ResourceTools.csproj" />
-    <ProjectReference Include="..\Test-Compressed\Test-Compressed.csproj" />
+    <ProjectReference Include="..\Test-Companion\Test-Companion.csproj" />
   </ItemGroup>
 
 </Project>
