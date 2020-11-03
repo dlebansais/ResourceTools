@@ -72,15 +72,13 @@
             Assembly CallingAssembly = Assembly.GetCallingAssembly();
             if (!LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out Stream ResourceStream))
             {
-                ResourceStream?.Dispose();
-
                 Contract.Unused(out value);
                 return false;
             }
             else
             {
                 // Decode the icon from the stream and set the first frame to the BitmapSource
-                BitmapDecoder decoder = IconBitmapDecoder.Create(ResourceStream, BitmapCreateOptions.None, BitmapCacheOption.None);
+                BitmapDecoder decoder = BitmapDecoder.Create(ResourceStream, BitmapCreateOptions.None, BitmapCacheOption.None);
                 ImageSource Result = decoder.Frames[0];
 
                 Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
@@ -164,8 +162,6 @@
         {
             if (!LoadInternalStream(resourceName, assemblyName, callingAssembly, out Stream ResourceStream))
             {
-                ResourceStream?.Dispose();
-
                 Contract.Unused(out value);
                 return false;
             }
@@ -193,7 +189,7 @@
                 // If not found, it could be because it's not tagged as "Embedded Resource".
                 Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
 
-                Contract.Unused(out resourceStream);
+                resourceStream = Stream.Null;
                 return false;
             }
             else

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -8,6 +8,8 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
+    <AssemblyVersion>1.1.0.57</AssemblyVersion>
+    <FileVersion>1.1.0.20</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -78,6 +78,9 @@
             Icon Icon;
             ImageSource ImageSource;
 
+            ITracer Logger = Tracer.Create("Test");
+            TestCompanion.TestSet.SetLogger(Logger);
+
             Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out Icon);
             Assert.That(!Success);
 
@@ -117,6 +120,9 @@
         {
             bool Success;
             Bitmap Bitmap;
+
+            ITracer Logger = Tracer.Create("Test");
+            TestCompanion.TestSet.SetLogger(Logger);
 
             Success = TestCompanion.TestSet.LoadBitmap(string.Empty, string.Empty, out Bitmap);
             Assert.That(!Success);
