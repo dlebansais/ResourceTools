@@ -29,6 +29,14 @@
         }
 
         /// <summary>
+        /// Removes the tracing object set by <see cref="SetLogger(ITracer)"/>.
+        /// </summary>
+        public static void ClearLogger()
+        {
+            Logger = null;
+        }
+
+        /// <summary>
         /// Gets the tracing object.
         /// </summary>
         public static ITracer? Logger { get; private set; }

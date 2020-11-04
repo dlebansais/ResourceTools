@@ -13,6 +13,19 @@ namespace TestCompanion
             ResourceLoader.SetLogger(logger);
         }
 
+        public static void ClearLogger()
+        {
+            ResourceLoader.ClearLogger();
+        }
+
+        public static ITracer? Logger
+        {
+            get
+            {
+                return ResourceLoader.Logger;
+            }
+        }
+
         public static bool LoadIcon(string resourceName, string assemblyName, out Icon value)
         {
             return ResourceLoader.LoadIcon(resourceName, assemblyName, out value);
