@@ -43,6 +43,7 @@
             bool Success;
             Icon Icon;
             Stream Stream;
+            Bitmap Bitmap;
 
             bool Constant = Dependency.GetConstant();
             Assert.That(Constant == true);
@@ -65,6 +66,9 @@
             Assert.That(Success);
 
             Stream.Dispose();
+
+            Success = TestCompanion.TestSet.Load("compressed.png", "Test-Compressed", out Bitmap);
+            Assert.That(Success);
 
             Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out Stream);
             Assert.That(!Success);
@@ -157,6 +161,7 @@
             bool Success;
             Icon Icon;
             Stream Stream;
+            Bitmap Bitmap;
 
             bool Constant = Dependency.GetConstant();
             Assert.That(Constant == true);
@@ -180,6 +185,9 @@
             Assert.That(Success);
 
             Stream.Dispose();
+
+            Success = TestCompanion.TestSet.Load("compressed.png", "Test-Compressed", out Bitmap);
+            Assert.That(Success);
 
             Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out Stream);
             Assert.That(!Success);
