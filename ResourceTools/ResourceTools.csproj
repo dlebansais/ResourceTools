@@ -7,14 +7,14 @@
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <Authors>David Le Bansais</Authors>
     <Company />
     <Product />
     <Copyright>Copyright © 2020 David Le Bansais</Copyright>
     <RepositoryUrl>https://github.com/dlebansais/ResourceTools</RepositoryUrl>
-    <AssemblyVersion>1.1.1.58</AssemblyVersion>
-    <FileVersion>1.1.1.25</FileVersion>
+    <AssemblyVersion>1.1.2.58</AssemblyVersion>
+    <FileVersion>1.1.2.25</FileVersion>
     <Description>A set of tools to load resources, even if compressed with Costura Fody</Description>
   </PropertyGroup>
 
@@ -37,8 +37,8 @@
     </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="Tracing" Version="2.2.19302.1" />
-    <PackageReference Include="Contracts-Debug" Version="1.0.8" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-    <PackageReference Include="Contracts" Version="1.0.8" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+    <PackageReference Include="Contracts-Debug" Version="1.0.10" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <PackageReference Include="Contracts" Version="1.0.10" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(SolutionDir)'!='*Undefined*'">

@@ -8,8 +8,8 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
-    <AssemblyVersion>1.1.1.58</AssemblyVersion>
-    <FileVersion>1.1.1.20</FileVersion>
+    <AssemblyVersion>1.1.2.58</AssemblyVersion>
+    <FileVersion>1.1.2.20</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
