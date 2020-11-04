@@ -1,7 +1,7 @@
 # ResourceTools
 A set of tools to load resources, even if compressed with Costura Fody.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/9ppi48xqfttu9ey1?svg=true)](https://ci.appveyor.com/project/dlebansais/resourcetools) [![codecov](https://codecov.io/gh/dlebansais/ResourceTools/branch/master/graph/badge.svg?token=O44VPQYRE7)](undefined) [![CodeFactor](https://www.codefactor.io/repository/github/dlebansais/resourcetools/badge)](https://www.codefactor.io/repository/github/dlebansais/resourcetools)
+[![Build status](https://ci.appveyor.com/api/projects/status/9ppi48xqfttu9ey1?svg=true)](https://ci.appveyor.com/project/dlebansais/resourcetools) [![codecov](https://codecov.io/gh/dlebansais/ResourceTools/branch/master/graph/badge.svg?token=O44VPQYRE7)](https://codecov.io/gh/dlebansais/ResourceTools) [![CodeFactor](https://www.codefactor.io/repository/github/dlebansais/resourcetools/badge)](https://www.codefactor.io/repository/github/dlebansais/resourcetools)
 
 ## Use
 
