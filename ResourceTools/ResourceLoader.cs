@@ -78,14 +78,9 @@
             Contract.RequireNotNull(assemblyName, out string AssemblyName);
 
             Assembly CallingAssembly = Assembly.GetCallingAssembly();
-            if (!LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out Stream ResourceStream))
+            if (LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out Stream ResourceStream))
             {
-                Contract.Unused(out value);
-                return false;
-            }
-            else
-            {
-                // Decode the icon from the stream and set the first frame to the BitmapSource
+                // Decode the icon from the stream and set the first frame to the BitmapSource.
                 BitmapDecoder decoder = BitmapDecoder.Create(ResourceStream, BitmapCreateOptions.None, BitmapCacheOption.None);
                 ImageSource Result = decoder.Frames[0];
 
@@ -94,6 +89,9 @@
                 value = Result;
                 return true;
             }
+
+            Contract.Unused(out value);
+            return false;
         }
         #endregion
 
@@ -168,19 +166,18 @@
         private static bool LoadInternal<TResource>(string resourceName, string assemblyName, Assembly callingAssembly, out TResource value)
             where TResource : class
         {
-            if (!LoadInternalStream(resourceName, assemblyName, callingAssembly, out Stream ResourceStream))
+            if (LoadInternalStream(resourceName, assemblyName, callingAssembly, out Stream ResourceStream))
             {
-                Contract.Unused(out value);
-                return false;
-            }
-            else
-            {
-                TResource Result = (TResource)Activator.CreateInstance(typeof(TResource), ResourceStream) !;
+                Contract.RequireNotNull(Activator.CreateInstance(typeof(TResource), ResourceStream), out TResource Result);
+
                 Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
 
                 value = Result;
                 return true;
             }
+
+            Contract.Unused(out value);
+            return false;
         }
 
         private static bool LoadInternalStream(string resourceName, string assemblyName, Assembly callingAssembly, out Stream resourceStream)
@@ -192,18 +189,18 @@
 
             Assembly ResourceAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : callingAssembly;
 
-            if (!GetResourcePath(ResourceAssembly, resourceName, out string ResourcePath))
+            if (GetResourcePath(ResourceAssembly, resourceName, out string ResourcePath))
+            {
+                Contract.RequireNotNull(ResourceAssembly.GetManifestResourceStream(ResourcePath), out resourceStream);
+                return true;
+            }
+            else
             {
                 // If not found, it could be because it's not tagged as "Embedded Resource".
                 Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
 
                 resourceStream = Stream.Null;
                 return false;
-            }
-            else
-            {
-                resourceStream = ResourceAssembly.GetManifestResourceStream(ResourcePath) !;
-                return true;
             }
         }
 
@@ -214,7 +211,7 @@
             EmbeddedAssemblyResourcePath = EmbeddedAssemblyResourcePath.ToLowerInvariant();
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
-            using Stream CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath) !;
+            using Stream? CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath);
             if (CompressedStream == null)
             {
                 Logger?.Write(Category.Error, $"Assembly {assemblyName} not found (did you forget to use Costura Fody?)");
