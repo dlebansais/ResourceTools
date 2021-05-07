@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net48;net5.0-windows</TargetFrameworks>
@@ -16,18 +16,25 @@
     <AssemblyVersion>1.1.3.60</AssemblyVersion>
     <FileVersion>1.1.3.27</FileVersion>
     <Description>A set of tools to load resources, even if compressed with Costura Fody</Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RootNamespace>ResourceTools</RootNamespace>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.333">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="Tracing" Version="2.2.19302.1" />
     <PackageReference Include="Contracts-Debug" Version="1.0.11" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
     <PackageReference Include="Contracts" Version="1.0.11" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
