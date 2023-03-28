@@ -33,7 +33,7 @@
             {
                 ResourceToolsAssembly = null;
             }
-            Assume.That(ResourceToolsAssembly != null);
+            Assume.That(ResourceToolsAssembly is not null);
         }
 
         #region No Logger Tests
@@ -73,7 +73,7 @@
             Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out Stream);
             Assert.That(!Success);
 
-            Assert.That(TestCompanion.TestSet.Logger == null);
+            Assert.That(TestCompanion.TestSet.Logger is null);
         }
 
         [Test]
@@ -118,7 +118,7 @@
             Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource);
             Assert.That(!Success);
 
-            Assert.That(TestCompanion.TestSet.Logger == null);
+            Assert.That(TestCompanion.TestSet.Logger is null);
         }
 
         [Test]
@@ -150,7 +150,7 @@
             Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out Bitmap);
             Assert.That(!Success);
 
-            Assert.That(TestCompanion.TestSet.Logger == null);
+            Assert.That(TestCompanion.TestSet.Logger is null);
         }
         #endregion
 

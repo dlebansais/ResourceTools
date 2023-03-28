@@ -212,7 +212,7 @@
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
             using Stream? CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath);
-            if (CompressedStream == null)
+            if (CompressedStream is null)
             {
                 Logger?.Write(Category.Error, $"Assembly {assemblyName} not found (did you forget to use Costura Fody?)");
 
