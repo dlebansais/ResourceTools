@@ -5,7 +5,7 @@
     <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
     <RootNamespace>TestResourceTools</RootNamespace>
     <UseWPF>true</UseWPF>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
     <AssemblyVersion>1.1.4.60</AssemblyVersion>

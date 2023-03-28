@@ -1,10 +1,9 @@
-﻿namespace TestResourceTools
+﻿namespace TestResourceTools;
+
+public static class Dependency
 {
-    public static class Dependency
+    public static bool GetConstant()
     {
-        public static bool GetConstant()
-        {
-            return true;
-        }
+        return true;
     }
 }
