@@ -7,14 +7,14 @@
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.1.3</Version>
+    <Version>1.1.4</Version>
     <Authors>David Le Bansais</Authors>
     <Company />
     <Product />
     <Copyright>Copyright © 2020 David Le Bansais</Copyright>
     <RepositoryUrl>https://github.com/dlebansais/ResourceTools</RepositoryUrl>
-    <AssemblyVersion>1.1.3.60</AssemblyVersion>
-    <FileVersion>1.1.3.27</FileVersion>
+    <AssemblyVersion>1.1.4.60</AssemblyVersion>
+    <FileVersion>1.1.4.27</FileVersion>
     <Description>A set of tools to load resources, even if compressed with Costura Fody</Description>
     <NeutralLanguage>en-US</NeutralLanguage>
     <RootNamespace>ResourceTools</RootNamespace>
