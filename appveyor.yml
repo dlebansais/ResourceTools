@@ -30,17 +30,13 @@ before_build:
   - ps: (Get-Content nuget.config).replace('Insert token here', $env:package_token) | Set-Content nuget.config
   - nuget restore %APPVEYOR_PROJECT_NAME%.sln
   - nuget install GitCommitId -DependencyVersion Highest -OutputDirectory packages
-  - |-
-    printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" > build_all.xml
-    printf "  <Project xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n" >> build_all.xml
-    printf "    <Target Name=\"Build\">\n" >> build_all.xml
-    printf "      <MSBuild Projects=\"%APPVEYOR_PROJECT_NAME%.sln\" Properties=\"Configuration=Debug;Platform=x64\"/>\n" >> build_all.xml
-    printf "      <MSBuild Projects=\"%APPVEYOR_PROJECT_NAME%.sln\" Properties=\"Configuration=Release;Platform=x64\"/>\n" >> build_all.xml
-    printf "    </Target>\n" >> build_all.xml
-    printf "</Project>\n" >> build_all.xml
+
+configuration:
+  - Release
+  - Debug
 
 build:
-  project: build_all.xml
+  project: $(APPVEYOR_PROJECT_NAME).sln
 
 after_build:
   - nuget install Packager -DependencyVersion Highest -OutputDirectory packages # Install Packager
@@ -54,11 +50,11 @@ after_build:
   - if exist nuget-debug\%APPVEYOR_PROJECT_NAME%-Debug.nuspec nuget pack nuget-debug\%APPVEYOR_PROJECT_NAME%-Debug.nuspec
   - ps: |-
         $xml = [xml](Get-Content .\$env:APPVEYOR_PROJECT_NAME\$env:APPVEYOR_PROJECT_NAME.csproj)
-  - ps: $version = $xml.Project.PropertyGroup.Version
+  - ps: $version=$xml.Project.PropertyGroup.Version
   - ps: set version_tag v$version
-  - ps: $version_tag = $version_tag -replace ' ',''
+  - ps: $version_tag=$version_tag.Trim()
   - ps: $env:VERSION_TAG=$version_tag
-  - echo "Version is %VERSION_TAG%"
+  - echo Version is "%VERSION_TAG%"
 
 before_test:
   - nuget install OpenCover -Version %opencover_version% -OutputDirectory packages
