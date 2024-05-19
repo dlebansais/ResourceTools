@@ -78,7 +78,7 @@ public static class ResourceLoader
         Contract.RequireNotNull(assemblyName, out string AssemblyName);
 
         Assembly CallingAssembly = Assembly.GetCallingAssembly();
-        if (LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out Stream ResourceStream))
+        if (LoadInternalStream(ResourceName, AssemblyName, CallingAssembly) is Stream ResourceStream)
         {
             // Decode the icon from the stream and set the first frame to the BitmapSource.
             BitmapDecoder decoder = BitmapDecoder.Create(ResourceStream, BitmapCreateOptions.None, BitmapCacheOption.None);
@@ -154,8 +154,11 @@ public static class ResourceLoader
         Contract.RequireNotNull(assemblyName, out string AssemblyName);
 
         Assembly CallingAssembly = Assembly.GetCallingAssembly();
-        if (LoadInternalStream(ResourceName, AssemblyName, CallingAssembly, out resourceStream))
+        if (LoadInternalStream(ResourceName, AssemblyName, CallingAssembly) is Stream LoadedStream)
+        {
+            resourceStream = LoadedStream;
             return true;
+        }
 
         Contract.Unused(out resourceStream);
         return false;
@@ -166,9 +169,9 @@ public static class ResourceLoader
     private static bool LoadInternal<TResource>(string resourceName, string assemblyName, Assembly callingAssembly, out TResource value)
         where TResource : class
     {
-        if (LoadInternalStream(resourceName, assemblyName, callingAssembly, out Stream ResourceStream))
+        if (LoadInternalStream(resourceName, assemblyName, callingAssembly) is Stream ResourceStream)
         {
-            Contract.RequireNotNull(Activator.CreateInstance(typeof(TResource), ResourceStream), out TResource Result);
+            TResource Result = (TResource)Contract.AssertNotNull(Activator.CreateInstance(typeof(TResource), ResourceStream));
 
             Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
 
@@ -180,27 +183,26 @@ public static class ResourceLoader
         return false;
     }
 
-    private static bool LoadInternalStream(string resourceName, string assemblyName, Assembly callingAssembly, out Stream resourceStream)
+    private static Stream? LoadInternalStream(string resourceName, string assemblyName, Assembly callingAssembly)
     {
         if (assemblyName.Length > 0)
-            if (!DecompressedAssemblyTable.ContainsKey(assemblyName))
+            if (!DecompressedAssemblyTable.TryGetValue(assemblyName, out _))
                 if (LoadEmbeddedAssemblyStream(assemblyName, callingAssembly, out Assembly DecompressedAssembly))
                     DecompressedAssemblyTable.Add(assemblyName, DecompressedAssembly);
 
-        Assembly ResourceAssembly = DecompressedAssemblyTable.ContainsKey(assemblyName) ? DecompressedAssemblyTable[assemblyName] : callingAssembly;
+        Assembly ResourceAssembly = DecompressedAssemblyTable.TryGetValue(assemblyName, out var Value) ? Value : callingAssembly;
 
         if (GetResourcePath(ResourceAssembly, resourceName, out string ResourcePath))
         {
-            Contract.RequireNotNull(ResourceAssembly.GetManifestResourceStream(ResourcePath), out resourceStream);
-            return true;
+            Stream ResourceStream = Contract.AssertNotNull(ResourceAssembly.GetManifestResourceStream(ResourcePath));
+            return ResourceStream;
         }
         else
         {
             // If not found, it could be because it's not tagged as "Embedded Resource".
             Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
 
-            resourceStream = Stream.Null;
-            return false;
+            return null;
         }
     }
 

@@ -1,36 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
-    <RootNamespace>TestResourceTools</RootNamespace>
-    <UseWPF>true</UseWPF>
-    <LangVersion>11.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <Platforms>x64</Platforms>
-    <AssemblyVersion>1.1.4.60</AssemblyVersion>
-    <FileVersion>1.1.4.20</FileVersion>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <RootNamespace>TestResourceTools</RootNamespace>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFrameworks>net481</TargetFrameworks>
+        <RootNamespace>TestResourceTools</RootNamespace>
+        <UseWPF>true</UseWPF>
+        <LangVersion>12</LangVersion>
+        <Nullable>enable</Nullable>
+        <Platforms>x64</Platforms>
+        <IsTestProject>true</IsTestProject>
+        <AssemblyVersion>1.1.5.61</AssemblyVersion>
+        <FileVersion>1.1.5.61</FileVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <RootNamespace>TestResourceTools</RootNamespace>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\compressed.ico" />
-    <None Remove="Resources\compressed.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources\compressed.ico" />
+        <None Remove="Resources\compressed.png" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\compressed.ico" />
-    <EmbeddedResource Include="Resources\compressed.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\compressed.ico" />
+        <EmbeddedResource Include="Resources\compressed.png" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\ResourceTools\ResourceTools.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\ResourceTools\ResourceTools.csproj" />
+    </ItemGroup>
 
 </Project>

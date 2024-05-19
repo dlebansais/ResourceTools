@@ -1,67 +1,104 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net48;net5.0-windows7.0;net6.0-windows7.0;net7.0-windows7.0</TargetFrameworks>
-    <UseWPF>true</UseWPF>
-    <LangVersion>11.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <Platforms>x64</Platforms>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.1.4</Version>
-    <Authors>David Le Bansais</Authors>
-    <Company />
-    <Product />
-    <Copyright>Copyright © 2020 David Le Bansais</Copyright>
-    <RepositoryUrl>https://github.com/dlebansais/ResourceTools</RepositoryUrl>
-    <AssemblyVersion>1.1.4.60</AssemblyVersion>
-    <FileVersion>1.1.4.27</FileVersion>
-    <Description>A set of tools to load resources, even if compressed with Costura Fody</Description>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <RootNamespace>ResourceTools</RootNamespace>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net481;net8.0-windows</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+        <LangVersion>12</LangVersion>
+        <Nullable>enable</Nullable>
+        <Platforms>x64</Platforms>
 
-  <PropertyGroup>
-    <NoWarn>SA0001</NoWarn>
-    <NoWarn>NETSDK1138</NoWarn>
-  </PropertyGroup>
+        <RootNamespace>ResourceTools</RootNamespace>
+        <Version>1.1.5</Version>
+        <Authors>David Le Bansais</Authors>
+        <Company />
+        <Product />
+        <Description>A set of tools to load resources, even if compressed with Costura Fody</Description>
+        <Copyright>Copyright © 2024 David Le Bansais</Copyright>
+        <AssemblyVersion>1.1.5.61</AssemblyVersion>
+        <FileVersion>1.1.5.61</FileVersion>
+        <RepositoryUrl>https://github.com/dlebansais/ResourceTools</RepositoryUrl>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest-all</AnalysisLevel>
+        <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.435">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Method.Contracts" Version="1.1.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-    <PackageReference Include="Tracing" Version="2.2.19302.1" />
-  </ItemGroup>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
 
-  <Target Name="_ResolveCopyLocalNuGetPackagePdbsAndXml" Condition="$(CopyLocalLockFileAssemblies) == true" AfterTargets="ResolveReferences">
+    <PropertyGroup>
+        <NoWarn>SA0001</NoWarn>
+        <NoWarn>NETSDK1138</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
-      <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).pdb')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' And Exists('%(RootDir)%(Directory)%(Filename).pdb') " />
-      <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' And Exists('%(RootDir)%(Directory)%(Filename).xml') " />
+        <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
-  </Target>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(SolutionDir)'!='*Undefined*'">
-    <Exec Command="if exist &quot;$(SolutionDir)updatecommit.bat&quot; call &quot;$(SolutionDir)updatecommit.bat&quot; &quot;$(SolutionDir)&quot; &quot;$(TargetPath)&quot;" />
-    <Exec Command="if exist &quot;$(SolutionDir)signfile.bat&quot; call &quot;$(SolutionDir)signfile.bat&quot; &quot;$(SolutionDir)&quot; &quot;$(Configuration)-$(Platform)&quot; &quot;$(TargetPath)&quot;" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <Exec Command="if not exist &quot;$(SolutionDir)nuget-debug\lib\net5.0&quot; mkdir &quot;$(SolutionDir)nuget-debug\lib\net5.0&quot;" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'=='net5.0-windows'" />
-    <Exec Command="if not exist &quot;$(SolutionDir)nuget-debug\lib\$(TargetFramework)&quot; mkdir &quot;$(SolutionDir)nuget-debug\lib\$(TargetFramework)&quot;" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'!='net5.0-windows'" />
-    <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget-debug\lib\net5.0\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'=='net5.0-windows'" />
-    <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget-debug\lib\$(TargetFramework)\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'!='net5.0-windows'" />
-    <Exec Command="if not exist &quot;$(SolutionDir)nuget\lib\net5.0&quot; mkdir &quot;$(SolutionDir)nuget\lib\net5.0&quot;" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'=='net5.0-windows'" />
-    <Exec Command="if not exist &quot;$(SolutionDir)nuget\lib\$(TargetFramework)&quot; mkdir &quot;$(SolutionDir)nuget\lib\$(TargetFramework)&quot;" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'!='net5.0-windows'" />
-    <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget\lib\net5.0\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'=='net5.0-windows'" />
-    <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget\lib\$(TargetFramework)\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'!='net5.0-windows'" />
-  </Target>
+    <PropertyGroup Condition="'$(APPVEYOR)' == 'True'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="dlebansais.CSharpLatest" Version="0.0.7">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="ConsistencyAnalyzer" Version="1.3.22">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Method.Contracts.Analyzers-Debug" Version="1.4.4" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Method.Contracts.Analyzers" Version="1.4.4" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="PolySharp" Version="1.14.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <PackageReference Include="System.Drawing.Common" Version="8.0.5" />
+        <PackageReference Include="Tracing" Version="2.4.5" />
+        <PackageReference Include="Method.Contracts-Debug" Version="1.4.2" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="Method.Contracts" Version="1.4.2" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+    </ItemGroup>
+
+    <Target Name="_ResolveCopyLocalNuGetPackagePdbsAndXml" Condition="$(CopyLocalLockFileAssemblies) == true" AfterTargets="ResolveReferences">
+        <ItemGroup>
+            <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).pdb')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' And Exists('%(RootDir)%(Directory)%(Filename).pdb') " />
+            <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' And Exists('%(RootDir)%(Directory)%(Filename).xml') " />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(SolutionDir)'!='*Undefined*'">
+        <Exec Command="if exist &quot;$(SolutionDir)updatecommit.bat&quot; call &quot;$(SolutionDir)updatecommit.bat&quot; &quot;$(SolutionDir)&quot; &quot;$(TargetPath)&quot;" />
+        <Exec Command="if exist &quot;$(SolutionDir)signfile.bat&quot; call &quot;$(SolutionDir)signfile.bat&quot; &quot;$(SolutionDir)&quot; &quot;$(Configuration)-$(Platform)&quot; &quot;$(TargetPath)&quot;" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+        <Exec Command="if not exist &quot;$(SolutionDir)nuget-debug\lib\net5.0&quot; mkdir &quot;$(SolutionDir)nuget-debug\lib\net5.0&quot;" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'=='net5.0-windows'" />
+        <Exec Command="if not exist &quot;$(SolutionDir)nuget-debug\lib\$(TargetFramework)&quot; mkdir &quot;$(SolutionDir)nuget-debug\lib\$(TargetFramework)&quot;" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'!='net5.0-windows'" />
+        <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget-debug\lib\net5.0\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'=='net5.0-windows'" />
+        <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget-debug\lib\$(TargetFramework)\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(TargetFramework)'!='net5.0-windows'" />
+        <Exec Command="if not exist &quot;$(SolutionDir)nuget\lib\net5.0&quot; mkdir &quot;$(SolutionDir)nuget\lib\net5.0&quot;" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'=='net5.0-windows'" />
+        <Exec Command="if not exist &quot;$(SolutionDir)nuget\lib\$(TargetFramework)&quot; mkdir &quot;$(SolutionDir)nuget\lib\$(TargetFramework)&quot;" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'!='net5.0-windows'" />
+        <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget\lib\net5.0\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'=='net5.0-windows'" />
+        <Exec Command="if exist &quot;$(TargetPath)&quot; copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)nuget\lib\$(TargetFramework)\&quot; &gt; nul" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(TargetFramework)'!='net5.0-windows'" />
+    </Target>
 
 </Project>

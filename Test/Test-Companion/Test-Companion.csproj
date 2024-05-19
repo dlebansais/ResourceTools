@@ -1,47 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
-    <RootNamespace>TestCompanion</RootNamespace>
-    <UseWPF>true</UseWPF>
-    <LangVersion>11.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <Platforms>x64</Platforms>
-    <AssemblyVersion>1.1.4.60</AssemblyVersion>
-    <FileVersion>1.1.4.21</FileVersion>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <RootNamespace>TestCompanion</RootNamespace>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFrameworks>net481</TargetFrameworks>
+        <RootNamespace>TestCompanion</RootNamespace>
+        <UseWPF>true</UseWPF>
+        <LangVersion>12</LangVersion>
+        <Nullable>enable</Nullable>
+        <Platforms>x64</Platforms>
+        <IsTestProject>true</IsTestProject>
+        <AssemblyVersion>1.1.5.61</AssemblyVersion>
+        <FileVersion>1.1.5.61</FileVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <RootNamespace>TestCompanion</RootNamespace>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\main.ico" />
-    <None Remove="Resources\main.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources\main.ico" />
+        <None Remove="Resources\main.png" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\main.ico" />
-    <EmbeddedResource Include="Resources\main.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\main.ico" />
+        <EmbeddedResource Include="Resources\main.png" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="5.3.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Fody" Version="6.5.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Tracing" Version="2.2.19302.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Costura.Fody" Version="5.7.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Fody" Version="6.8.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Tracing" Version="2.4.5" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Test-Compressed\Test-Compressed.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Test-Compressed\Test-Compressed.csproj" />
+    </ItemGroup>
 
 </Project>
