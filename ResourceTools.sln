@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30611.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceTools", "ResourceTools\ResourceTools.csproj", "{678AD8C2-50CC-4961-AC89-BC727F6CD074}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -15,11 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreBuild", "PreBuild\PreBuild.csproj", "{ABB21FD7-B8E3-40FC-81F4-D6A4D873B6B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-ResourceTools", "Test\Test-ResourceTools\Test-ResourceTools.csproj", "{F1861124-902C-45BB-A90E-D3625BE8BF46}"
-	ProjectSection(ProjectDependencies) = postProject
-		{65178200-2EA4-46BA-B7A9-CDFBDC9C9439} = {65178200-2EA4-46BA-B7A9-CDFBDC9C9439}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-Compressed", "Test\Test-Compressed\Test-Compressed.csproj", "{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-Companion", "Test\Test-Companion\Test-Companion.csproj", "{65178200-2EA4-46BA-B7A9-CDFBDC9C9439}"
@@ -27,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-Companion", "Test\Test
 		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F} = {4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}
 		{678AD8C2-50CC-4961-AC89-BC727F6CD074} = {678AD8C2-50CC-4961-AC89-BC727F6CD074}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceTools.Test", "Test\ResourceTools.Test\ResourceTools.Test.csproj", "{908FD517-DDBE-469B-838D-DA823D9BE807}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +39,6 @@ Global
 		{ABB21FD7-B8E3-40FC-81F4-D6A4D873B6B5}.Debug|x64.Build.0 = Debug|x64
 		{ABB21FD7-B8E3-40FC-81F4-D6A4D873B6B5}.Release|x64.ActiveCfg = Release|x64
 		{ABB21FD7-B8E3-40FC-81F4-D6A4D873B6B5}.Release|x64.Build.0 = Release|x64
-		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Debug|x64.ActiveCfg = Debug|x64
-		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Debug|x64.Build.0 = Debug|x64
-		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Release|x64.ActiveCfg = Release|x64
-		{F1861124-902C-45BB-A90E-D3625BE8BF46}.Release|x64.Build.0 = Release|x64
 		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Debug|x64.ActiveCfg = Debug|x64
 		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Debug|x64.Build.0 = Debug|x64
 		{4F893257-7DCE-4A6A-9B11-AC211FB0BC7F}.Release|x64.ActiveCfg = Release|x64
@@ -54,6 +47,10 @@ Global
 		{65178200-2EA4-46BA-B7A9-CDFBDC9C9439}.Debug|x64.Build.0 = Debug|x64
 		{65178200-2EA4-46BA-B7A9-CDFBDC9C9439}.Release|x64.ActiveCfg = Release|x64
 		{65178200-2EA4-46BA-B7A9-CDFBDC9C9439}.Release|x64.Build.0 = Release|x64
+		{908FD517-DDBE-469B-838D-DA823D9BE807}.Debug|x64.ActiveCfg = Debug|x64
+		{908FD517-DDBE-469B-838D-DA823D9BE807}.Debug|x64.Build.0 = Debug|x64
+		{908FD517-DDBE-469B-838D-DA823D9BE807}.Release|x64.ActiveCfg = Release|x64
+		{908FD517-DDBE-469B-838D-DA823D9BE807}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
