@@ -19,6 +19,9 @@ init:
 environment:
   package_token:
     secure: oeB0vPa3ehegduJ/WnxLssnK6wiIc8MVx0lVYeiXKT6pIz9ZDQ4ioQ55g6GYz9dW
+  opencover_version: 4.7.1221
+  codecov_uploader_version: 0.7.1
+  csharp-format_version: 0.0.9
 
 matrix:
   fast_finish: true     # set this flag to immediately finish build once one of the jobs fails.
