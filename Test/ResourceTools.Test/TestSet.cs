@@ -15,24 +15,14 @@ public class TestSet
     [OneTimeSetUp]
     public static void InitTestSession()
     {
-        //System.Diagnostics.Debug.Assert(false);
-
         CultureInfo enUS = CultureInfo.CreateSpecificCulture("en-US");
         CultureInfo.DefaultThreadCurrentCulture = enUS;
         CultureInfo.DefaultThreadCurrentUICulture = enUS;
         Thread.CurrentThread.CurrentCulture = enUS;
         Thread.CurrentThread.CurrentUICulture = enUS;
 
-        Assembly? ResourceToolsAssembly;
+        Assembly? ResourceToolsAssembly = Assembly.Load("ResourceTools");
 
-        try
-        {
-            ResourceToolsAssembly = Assembly.Load("ResourceTools");
-        }
-        catch
-        {
-            ResourceToolsAssembly = null;
-        }
         Assume.That(ResourceToolsAssembly is not null);
     }
 
