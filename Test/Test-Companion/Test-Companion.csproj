@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>net481</TargetFrameworks>
+        <TargetFrameworks>net481;net8.0-windows7.0</TargetFrameworks>
         <RootNamespace>TestCompanion</RootNamespace>
         <UseWPF>true</UseWPF>
         <LangVersion>12</LangVersion>
