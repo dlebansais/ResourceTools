@@ -1,14 +1,14 @@
 namespace TestCompanion;
 
-using ResourceTools;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media;
-using Tracing;
+using Microsoft.Extensions.Logging;
+using ResourceTools;
 
-public class TestSet
+public static class TestSet
 {
-    public static void SetLogger(ITracer logger)
+    public static void SetLogger(ILogger logger)
     {
         ResourceLoader.SetLogger(logger);
     }
@@ -18,13 +18,7 @@ public class TestSet
         ResourceLoader.ClearLogger();
     }
 
-    public static ITracer? Logger
-    {
-        get
-        {
-            return ResourceLoader.Logger;
-        }
-    }
+    public static ILogger? Logger => ResourceLoader.Logger;
 
     public static bool LoadIcon(string resourceName, string assemblyName, out Icon value)
     {
@@ -42,7 +36,7 @@ public class TestSet
     }
 
     public static bool Load<TResource>(string resourceName, string assemblyName, out TResource value)
-        where TResource: class
+        where TResource : class
     {
         return ResourceLoader.Load(resourceName, assemblyName, out value);
     }

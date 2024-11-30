@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Library</OutputType>
         <TargetFrameworks>net481;net8.0-windows7.0</TargetFrameworks>
-        <RootNamespace>TestResourceTools</RootNamespace>
         <UseWPF>true</UseWPF>
-        <LangVersion>12</LangVersion>
+        <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
         <IsTestProject>true</IsTestProject>
-        <AssemblyVersion>1.1.5.61</AssemblyVersion>
-        <FileVersion>1.1.5.61</FileVersion>
+
+        <RootNamespace>ResourceTools.Test</RootNamespace>
+        
         <NeutralLanguage>en-US</NeutralLanguage>
-        <RootNamespace>TestResourceTools</RootNamespace>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest-all</AnalysisLevel>
+        <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,14 +30,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
         <PackageReference Include="NUnit" Version="4.2.2" />
-        <PackageReference Include="NUnit.Analyzers" Version="4.3.0">
+        <PackageReference Include="NUnit.Analyzers" Version="4.4.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-        <PackageReference Include="Tracing" Version="2.4.5" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>

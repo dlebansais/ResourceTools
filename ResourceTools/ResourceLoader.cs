@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Contracts;
-using Tracing;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// This class provides an interface to load embedded resources of a specific type, including those compressed with Costura Fody.
@@ -21,15 +21,15 @@ public static class ResourceLoader
     /// Sets a tracing object for diagnostic purpose.
     /// </summary>
     /// <param name="logger">The tracing object.</param>
-    public static void SetLogger(ITracer logger)
+    public static void SetLogger(ILogger logger)
     {
-        Contract.RequireNotNull(logger, out ITracer Logger);
+        Contract.RequireNotNull(logger, out ILogger Logger);
 
         ResourceLoader.Logger = Logger;
     }
 
     /// <summary>
-    /// Removes the tracing object set by <see cref="SetLogger(ITracer)"/>.
+    /// Removes the tracing object set by <see cref="SetLogger(ILogger)"/>.
     /// </summary>
     public static void ClearLogger()
     {
@@ -39,7 +39,7 @@ public static class ResourceLoader
     /// <summary>
     /// Gets the tracing object.
     /// </summary>
-    public static ITracer? Logger { get; private set; }
+    public static ILogger? Logger { get; private set; }
     #endregion
 
     #region Icon
@@ -84,7 +84,8 @@ public static class ResourceLoader
             BitmapDecoder decoder = BitmapDecoder.Create(ResourceStream, BitmapCreateOptions.None, BitmapCacheOption.None);
             ImageSource Result = decoder.Frames[0];
 
-            Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
+            if (Logger is not null)
+                LoggerMessage.Define(LogLevel.Debug, 0, $"Resource '{resourceName}' loaded")(Logger, null);
 
             value = Result;
             return true;
@@ -173,7 +174,8 @@ public static class ResourceLoader
         {
             TResource Result = (TResource)Contract.AssertNotNull(Activator.CreateInstance(typeof(TResource), ResourceStream));
 
-            Logger?.Write(Category.Debug, $"Resource '{resourceName}' loaded");
+            if (Logger is not null)
+                LoggerMessage.Define(LogLevel.Debug, 0, $"Resource '{resourceName}' loaded")(Logger, null);
 
             value = Result;
             return true;
@@ -186,11 +188,15 @@ public static class ResourceLoader
     private static Stream? LoadInternalStream(string resourceName, string assemblyName, Assembly callingAssembly)
     {
         if (assemblyName.Length > 0)
+        {
             if (!DecompressedAssemblyTable.TryGetValue(assemblyName, out _))
+            {
                 if (LoadEmbeddedAssemblyStream(assemblyName, callingAssembly, out Assembly DecompressedAssembly))
                     DecompressedAssemblyTable.Add(assemblyName, DecompressedAssembly);
+            }
+        }
 
-        Assembly ResourceAssembly = DecompressedAssemblyTable.TryGetValue(assemblyName, out var Value) ? Value : callingAssembly;
+        Assembly ResourceAssembly = DecompressedAssemblyTable.TryGetValue(assemblyName, out Assembly? Value) ? Value : callingAssembly;
 
         if (GetResourcePath(ResourceAssembly, resourceName, out string ResourcePath))
         {
@@ -200,7 +206,8 @@ public static class ResourceLoader
         else
         {
             // If not found, it could be because it's not tagged as "Embedded Resource".
-            Logger?.Write(Category.Error, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)");
+            if (Logger is not null)
+                LoggerMessage.Define(LogLevel.Error, 0, $"Resource '{resourceName}' not found (is it tagged as \"Embedded Resource\"?)")(Logger, null);
 
             return null;
         }
@@ -216,24 +223,25 @@ public static class ResourceLoader
         using Stream? CompressedStream = callingAssembly.GetManifestResourceStream(EmbeddedAssemblyResourcePath);
         if (CompressedStream is null)
         {
-            Logger?.Write(Category.Error, $"Assembly {assemblyName} not found (did you forget to use Costura Fody?)");
+            if (Logger is not null)
+                LoggerMessage.Define(LogLevel.Error, 0, $"Assembly {assemblyName} not found (did you forget to use Costura Fody?)")(Logger, null);
 
             Contract.Unused(out decompressedAssembly);
             return false;
         }
 
         using Stream UncompressedStream = new DeflateStream(CompressedStream, CompressionMode.Decompress);
-        using MemoryStream TemporaryStream = new MemoryStream();
+        using MemoryStream TemporaryStream = new();
 
         int Count;
-        var Buffer = new byte[81920];
+        byte[] Buffer = new byte[81920];
         while ((Count = UncompressedStream.Read(Buffer, 0, Buffer.Length)) != 0)
             TemporaryStream.Write(Buffer, 0, Count);
 
         TemporaryStream.Position = 0;
 
         byte[] array = new byte[TemporaryStream.Length];
-        TemporaryStream.Read(array, 0, array.Length);
+        _ = TemporaryStream.Read(array, 0, array.Length);
 
         decompressedAssembly = Assembly.Load(array);
         return true;
@@ -247,17 +255,19 @@ public static class ResourceLoader
             // Make sure the resource is tagged as such in the resource properties.
             string[] ResourceNames = resourceAssembly.GetManifestResourceNames();
             foreach (string Item in ResourceNames)
+            {
                 if (Item.EndsWith(resourceName, StringComparison.InvariantCulture))
                 {
                     resourcePath = Item;
                     return true;
                 }
+            }
         }
 
         Contract.Unused(out resourcePath);
         return false;
     }
 
-    private static Dictionary<string, Assembly> DecompressedAssemblyTable = new Dictionary<string, Assembly>();
+    private static readonly Dictionary<string, Assembly> DecompressedAssemblyTable = [];
     #endregion
 }

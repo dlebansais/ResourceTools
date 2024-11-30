@@ -1,16 +1,16 @@
-﻿namespace TestResourceTools;
+﻿namespace ResourceTools.Test;
 
-using NUnit.Framework;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Media;
-using Tracing;
+using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 
 [TestFixture]
-public class TestSet
+internal static class TestSet
 {
     [OneTimeSetUp]
     public static void InitTestSession()
@@ -31,36 +31,35 @@ public class TestSet
     public static void TestBasic()
     {
         bool Success;
-        Icon Icon;
-        Stream Stream;
-        Bitmap Bitmap;
 
-        bool Constant = Dependency.GetConstant();
-        Assert.That(Constant == true);
+        bool Constant = Dependency.GetConstant(true);
+        Assert.That(Constant, Is.True);
 
         TestCompanion.TestSet.ClearLogger();
 
-        Success = TestCompanion.TestSet.Load(string.Empty, string.Empty, out Icon);
+        Success = TestCompanion.TestSet.Load(string.Empty, string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.Load("invalid.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.Load("invalid.ico", string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.Load("invalid.ico", "Invalid", out Icon);
+        Success = TestCompanion.TestSet.Load("invalid.ico", "Invalid", out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.Load(string.Empty, "Invalid", out Icon);
+        Success = TestCompanion.TestSet.Load(string.Empty, "Invalid", out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadStream("main.png", string.Empty, out Stream);
+        Success = TestCompanion.TestSet.LoadStream("main.png", string.Empty, out Stream Stream1);
         Assert.That(Success);
 
-        Stream.Dispose();
+        Stream1.Dispose();
 
-        Success = TestCompanion.TestSet.Load("compressed.png", "Test-Compressed", out Bitmap);
+        Success = TestCompanion.TestSet.Load("compressed.png", "Test-Compressed", out Bitmap Bitmap1);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out Stream);
+        Bitmap1.Dispose();
+
+        Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out _);
         Assert.That(!Success);
 
         Assert.That(TestCompanion.TestSet.Logger is null);
@@ -70,42 +69,40 @@ public class TestSet
     public static void TestIcon()
     {
         bool Success;
-        Icon Icon;
-        ImageSource ImageSource;
 
         TestCompanion.TestSet.ClearLogger();
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out ImageSource _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("main.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("main.ico", string.Empty, out Icon _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out Icon _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out ImageSource _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Invalid", out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Invalid", out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out Icon);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out ImageSource _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource _);
         Assert.That(!Success);
 
         Assert.That(TestCompanion.TestSet.Logger is null);
@@ -115,29 +112,32 @@ public class TestSet
     public static void TestBitmap()
     {
         bool Success;
-        Bitmap Bitmap;
 
         TestCompanion.TestSet.ClearLogger();
 
-        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("main.png", string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("main.png", string.Empty, out Bitmap Bitmap1);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", string.Empty, out Bitmap);
+        Bitmap1.Dispose();
+
+        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Test-Compressed", out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Test-Compressed", out Bitmap Bitmap2);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Invalid", out Bitmap);
+        Bitmap2.Dispose();
+
+        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Invalid", out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("invalid.png", string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("invalid.png", string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out _);
         Assert.That(!Success);
 
         Assert.That(TestCompanion.TestSet.Logger is null);
@@ -149,37 +149,37 @@ public class TestSet
     public static void TestBasicWithLogger()
     {
         bool Success;
-        Icon Icon;
-        Stream Stream;
-        Bitmap Bitmap;
 
-        bool Constant = Dependency.GetConstant();
-        Assert.That(Constant == true);
+        bool Constant = Dependency.GetConstant(true);
+        Assert.That(Constant, Is.True);
 
-        ITracer Logger = Tracer.Create("Test");
+        using LoggerFactory LoggerFactory = new();
+        ILogger Logger = LoggerFactory.CreateLogger("Test");
         TestCompanion.TestSet.SetLogger(Logger);
 
-        Success = TestCompanion.TestSet.Load(string.Empty, string.Empty, out Icon);
+        Success = TestCompanion.TestSet.Load<Icon>(string.Empty, string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.Load("invalid.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.Load<Icon>("invalid.ico", string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.Load("invalid.ico", "Invalid", out Icon);
+        Success = TestCompanion.TestSet.Load<Icon>("invalid.ico", "Invalid", out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.Load(string.Empty, "Invalid", out Icon);
+        Success = TestCompanion.TestSet.Load<Icon>(string.Empty, "Invalid", out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadStream("main.png", string.Empty, out Stream);
+        Success = TestCompanion.TestSet.LoadStream("main.png", string.Empty, out Stream Stream1);
         Assert.That(Success);
 
-        Stream.Dispose();
+        Stream1.Dispose();
 
-        Success = TestCompanion.TestSet.Load("compressed.png", "Test-Compressed", out Bitmap);
+        Success = TestCompanion.TestSet.Load("compressed.png", "Test-Compressed", out Bitmap Bitmap1);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out Stream);
+        Bitmap1.Dispose();
+
+        Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out _);
         Assert.That(!Success);
 
         Assert.That(TestCompanion.TestSet.Logger == Logger);
@@ -189,43 +189,42 @@ public class TestSet
     public static void TestIconWithLogger()
     {
         bool Success;
-        Icon Icon;
-        ImageSource ImageSource;
 
-        ITracer Logger = Tracer.Create("Test");
+        using LoggerFactory LoggerFactory = new();
+        ILogger Logger = LoggerFactory.CreateLogger("Test");
         TestCompanion.TestSet.SetLogger(Logger);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, string.Empty, out ImageSource _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("main.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("main.ico", string.Empty, out Icon _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out Icon _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Test-Compressed", out ImageSource _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Invalid", out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("compressed.ico", "Invalid", out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out Icon);
+        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out Icon);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out Icon _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon("invalid.ico", string.Empty, out ImageSource _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource);
+        Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource _);
         Assert.That(!Success);
 
         Assert.That(TestCompanion.TestSet.Logger == Logger);
@@ -235,30 +234,32 @@ public class TestSet
     public static void TestBitmapWithLogger()
     {
         bool Success;
-        Bitmap Bitmap;
 
-        ITracer Logger = Tracer.Create("Test");
+        using LoggerFactory LoggerFactory = new();
+        ILogger Logger = LoggerFactory.CreateLogger("Test");
         TestCompanion.TestSet.SetLogger(Logger);
 
-        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("main.png", string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("main.png", string.Empty, out _);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Test-Compressed", out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Test-Compressed", out Bitmap Bitmap1);
         Assert.That(Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Invalid", out Bitmap);
+        Bitmap1.Dispose();
+
+        Success = TestCompanion.TestSet.LoadBitmap("compressed.png", "Invalid", out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap("invalid.png", string.Empty, out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap("invalid.png", string.Empty, out _);
         Assert.That(!Success);
 
-        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out Bitmap);
+        Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out _);
         Assert.That(!Success);
 
         Assert.That(TestCompanion.TestSet.Logger == Logger);
