@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net481;net8.0-windows7.0</TargetFrameworks>
         <UseWPF>true</UseWPF>
-        <LangVersion>13</LangVersion>
+        <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
         <IsTestProject>true</IsTestProject>
