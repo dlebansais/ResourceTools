@@ -31,10 +31,7 @@ public static class ResourceLoader
     /// <summary>
     /// Removes the tracing object set by <see cref="SetLogger(ILogger)"/>.
     /// </summary>
-    public static void ClearLogger()
-    {
-        Logger = null;
-    }
+    public static void ClearLogger() => Logger = null;
 
     /// <summary>
     /// Gets the tracing object.
