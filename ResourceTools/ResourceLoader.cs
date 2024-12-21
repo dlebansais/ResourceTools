@@ -197,7 +197,8 @@ public static class ResourceLoader
 
         if (GetResourcePath(ResourceAssembly, resourceName, out string ResourcePath))
         {
-            Stream ResourceStream = Contract.AssertNotNull(ResourceAssembly.GetManifestResourceStream(ResourcePath));
+            Stream? ResourceStream = ResourceAssembly.GetManifestResourceStream(ResourcePath);
+            _ = Contract.AssertNotNull(ResourceStream);
             return ResourceStream;
         }
         else
