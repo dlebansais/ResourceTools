@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net481;net8.0-windows7.0;net9.0-windows7.0</TargetFrameworks>
-        <UseWPF>true</UseWPF>
-        <LangVersion>13</LangVersion>
+        <TargetFrameworks>net481;net8.0-windows7.0;net10.0-windows7.0</TargetFrameworks>
+        <LangVersion>14</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
+        <UseWPF>true</UseWPF>
         <IsTestProject>true</IsTestProject>
 
         <RootNamespace>ResourceTools.Test</RootNamespace>
