@@ -60,9 +60,12 @@ internal static class TestSet
         Bitmap1.Dispose();
 
         Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out _);
-        Assert.That(!Success);
 
-        Assert.That(TestCompanion.TestSet.Logger is null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(!Success);
+            Assert.That(TestCompanion.TestSet.Logger, Is.Null);
+        }
     }
 
     [Test]
@@ -103,9 +106,12 @@ internal static class TestSet
         Assert.That(!Success);
 
         Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource _);
-        Assert.That(!Success);
 
-        Assert.That(TestCompanion.TestSet.Logger is null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(!Success);
+            Assert.That(TestCompanion.TestSet.Logger, Is.Null);
+        }
     }
 
     [Test]
@@ -138,9 +144,12 @@ internal static class TestSet
         Assert.That(!Success);
 
         Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out _);
-        Assert.That(!Success);
 
-        Assert.That(TestCompanion.TestSet.Logger is null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(!Success);
+            Assert.That(TestCompanion.TestSet.Logger, Is.Null);
+        }
     }
     #endregion
 
@@ -180,9 +189,12 @@ internal static class TestSet
         Bitmap1.Dispose();
 
         Success = TestCompanion.TestSet.LoadStream("invalid.png", string.Empty, out _);
-        Assert.That(!Success);
 
-        Assert.That(TestCompanion.TestSet.Logger == Logger);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(!Success);
+            Assert.That(TestCompanion.TestSet.Logger, Is.EqualTo(Logger));
+        }
     }
 
     [Test]
@@ -225,9 +237,12 @@ internal static class TestSet
         Assert.That(!Success);
 
         Success = TestCompanion.TestSet.LoadIcon(string.Empty, "Invalid", out ImageSource _);
-        Assert.That(!Success);
 
-        Assert.That(TestCompanion.TestSet.Logger == Logger);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(!Success);
+            Assert.That(TestCompanion.TestSet.Logger, Is.EqualTo(Logger));
+        }
     }
 
     [Test]
@@ -260,9 +275,12 @@ internal static class TestSet
         Assert.That(!Success);
 
         Success = TestCompanion.TestSet.LoadBitmap(string.Empty, "Invalid", out _);
-        Assert.That(!Success);
 
-        Assert.That(TestCompanion.TestSet.Logger == Logger);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(!Success);
+            Assert.That(TestCompanion.TestSet.Logger, Is.EqualTo(Logger));
+        }
     }
     #endregion
 }
